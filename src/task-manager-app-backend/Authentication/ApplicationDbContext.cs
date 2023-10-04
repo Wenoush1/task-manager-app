@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
+using task_manager_app_backend.Models;
 
 namespace task_manager_app_backend.Authentication
 {
@@ -9,9 +11,21 @@ namespace task_manager_app_backend.Authentication
     {
 
     }
+    public virtual DbSet<Assignment> Assignments{ get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
       base.OnModelCreating(builder);
+      builder.Entity<Assignment>(entity =>
+      {
+        entity.HasKey(e => e.AssignmentId);
+        entity.HasOne(e => e.ParentAssignment)
+              .WithMany(e => e.TasksRequiredToFinish)
+              .HasForeignKey(e => e.ParentAssignmentId)
+              .IsRequired(false);
+        //entity.HasMany(e => e.ApplicationUsers).WithMany(e => e.FavouriteTelemetries);
+
+        entity.ToTable("Assignments");
+      });
     }
   }
 }
