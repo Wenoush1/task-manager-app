@@ -1,7 +1,4 @@
-﻿using System.Globalization;
-using System.Text;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using task_manager_app_backend.Areas.Tasks;
 using task_manager_app_backend.Models;
 
@@ -21,11 +18,17 @@ public class AssignmentsController : ControllerBase
 
   */
   [HttpGet]
-  [Route("assigment")]
-  public async Task<ActionResult<IEnumerable<Assignment>>> GetData(AssignmentsHandler handler)
+  [Route("assignment")]
+  public async Task<ActionResult<IEnumerable<Assignment>>> GetAssigments(AssignmentsHandler handler)
   {
     return Ok(await handler.GetAssignments());
   }
 
+  [HttpPut]
+  [Route("assignment")]
+  public async Task<ActionResult> CreateAssignment(AssignmentsHandler handler, [FromQuery] int? parentId)
+  {
+    return Ok(handler.CreateAnAssigment(parentId));
+  }
 }
 

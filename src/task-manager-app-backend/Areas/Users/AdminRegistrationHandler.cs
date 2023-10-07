@@ -25,14 +25,13 @@ public class AdminRegistrationHandler : IHandler
       SecurityStamp = Guid.NewGuid().ToString(),
       UserName = model.Username
     };
-    var result = await _userManager.CreateAsync(user, model.Password);
-
+    await _userManager.CreateAsync(user, model.Password);
 
     if (await _roleManager.RoleExistsAsync(UserRoles.Admin) == false)
     {
       await _roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
     }
-    result = await _userManager.AddToRoleAsync(user, UserRoles.Admin);
+    var result = await _userManager.AddToRoleAsync(user, UserRoles.Admin);
 
     return result;
   }
