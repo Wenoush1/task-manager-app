@@ -16,17 +16,40 @@ namespace task_manager_app_backend.Areas.Tasks
 
     public async Task<ICollection<Assignment>> GetAssignments()
     {
-      return await _dbContext.Assignments.ToListAsync();
+      return await _dbContext.Assignments.Include(x=>x.TasksRequiredToFinish).ToListAsync();
     }
 
-    public async Task<ActionResult> CreateAnAssigment(int? parentId)
+    public async Task<ActionResult> CreateAnAssigment(CancellationToken token,AssignmentModel model)
     {
-      if (parentId == null)
+      if (model.ParentAssignmentId == null)
       {
-
-        return
+        var assignment = new Assignment{ 
+          Name = model.Name,
+          Description = model.Description,
+          ExpectedTimeToFinish = model.ExpectedTimeToFinish,
+          DateCreated = DateTime.Now,
+        };
+        _dbContext.Assignments.Add(assignment);
+        await _dbContext.SaveChangesAsync(token);
+        return new OkResult();
       }
-
+      else
+      {
+        var parentAssignment = await _dbContext.Assignments.FindAsync(model.ParentAssignmentId);
+        var assignment = new Assignment
+        {
+          Name = model.Name,
+          Description = model.Description,
+          ExpectedTimeToFinish = model.ExpectedTimeToFinish,
+          DateCreated = DateTime.Now,
+          ParentAssignmentId = model.ParentAssignmentId,
+          ParentAssignment = parentAssignment
+        };
+        parentAssignment.TasksRequiredToFinish.Add(assignment);
+        await _dbContext.SaveChangesAsync();
+        return new OkResult();
+      }
+      return new OkResult();
     }
   }
 }

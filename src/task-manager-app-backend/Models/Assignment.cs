@@ -9,8 +9,8 @@ namespace task_manager_app_backend.Models;
     public int ExpectedTimeToFinish { get; set; }
     public DateTime DateCreated { get; set; }
     public int? ParentAssignmentId { get ; set; }
-    public Assignment ParentAssignment { get; set; }
+    public Assignment? ParentAssignment { get; set; }
     [JsonIgnore]
-    public ICollection<Assignment> TasksRequiredToFinish { get; set; }
+    public ICollection<Assignment> TasksRequiredToFinish  { get; set; } = new List<Assignment>();
 
   }

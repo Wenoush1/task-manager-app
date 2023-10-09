@@ -8,15 +8,6 @@ namespace NetGlade.Onboarding.DummyDevice.Areas.Telemetries;
 public class AssignmentsController : ControllerBase
 {
 
-
-
-
-  /*public TasksController(TelemetriesHandler loader)
-  {
-    _telemetriesLoader = loader;
-  }
-
-  */
   [HttpGet]
   [Route("assignment")]
   public async Task<ActionResult<IEnumerable<Assignment>>> GetAssigments(AssignmentsHandler handler)
@@ -26,9 +17,9 @@ public class AssignmentsController : ControllerBase
 
   [HttpPut]
   [Route("assignment")]
-  public async Task<ActionResult> CreateAssignment(AssignmentsHandler handler, [FromQuery] int? parentId)
+  public async Task<ActionResult> CreateAssignment(AssignmentsHandler handler,CancellationToken token, [FromBody] AssignmentModel model)
   {
-    return Ok(handler.CreateAnAssigment(parentId));
+    return Ok(await handler.CreateAnAssigment(token,model));
   }
 }
 
