@@ -13,7 +13,9 @@ Create an app that helps streamline and manage daily tasks, time management, and
    - Connect to a Google Calendar or similar service.
    - Users can set minimal required daily free time and sleep time.
    - Users can set their daily work time and minimal required monthly work hours.
-   - The app will automatically fill in the calendar based on work and free time, fitting new tasks accordingly.
+      - Users can create multiple different jobs/part-times with attributes like: minimum shift lenght,minimun hours per month, opening hours and if the shifts should be filled out automatically
+      - Users can also add their school courses and expected time spent in school
+      - Users should be able to press a button(or have it done automatically if they chose to) and the app will try to fill out their calender with as many shifts as it can to simplify shift planning
    - *Future enhancement*: Allow users to add friends and coordinate free time for hangouts.
 
 3. **Financial Management**
