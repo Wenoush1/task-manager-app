@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using task_manager_app_backend.Areas.Assignments;
 using task_manager_app_backend.Areas.Tasks;
 using task_manager_app_backend.Models;
 
@@ -20,6 +21,19 @@ public class AssignmentsController : ControllerBase
   public async Task<ActionResult> CreateAssignment(AssignmentsHandler handler,CancellationToken token, [FromBody] AssignmentModel model)
   {
     return Ok(await handler.CreateAnAssigment(token,model));
+  }
+
+  [HttpPut]
+  [Route("assignment-type")]
+  public async Task<ActionResult> CreateType(TypeHandler handler, CancellationToken token, [FromBody] string name)
+  {
+    return Ok(await handler.CreateType(token,name));
+  }
+  [HttpGet]
+  [Route("assignment-type")]
+  public async Task<ActionResult<ICollection<AssignmentType>>> GetTypes(TypeHandler handler, CancellationToken token)
+  {
+    return Ok(await handler.GetTypes(token));
   }
 }
 

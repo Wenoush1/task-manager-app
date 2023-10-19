@@ -11,6 +11,7 @@ namespace task_manager_app_backend.Authentication
 
     }
     public virtual DbSet<Assignment> Assignments { get; set; }
+    public virtual DbSet<AssignmentType> AssignmentTypes { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
       base.OnModelCreating(builder);
@@ -20,8 +21,16 @@ namespace task_manager_app_backend.Authentication
         entity.HasOne(e => e.ParentAssignment)
               .WithMany(e => e.TasksRequiredToFinish)
               .HasForeignKey(e => e.ParentAssignmentId);
-
         entity.ToTable("Assignments");
+      });
+
+      builder.Entity<AssignmentType>(entity =>
+      {
+        entity.HasMany(e => e.Assignments)
+              .WithOne(e => e.Type)
+              .HasForeignKey(e => e.TypeId)
+              .IsRequired();
+        entity.ToTable("TaskTypes");
       });
     }
   }
