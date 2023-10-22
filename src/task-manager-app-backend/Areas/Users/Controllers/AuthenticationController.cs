@@ -1,8 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using task_manager_app_backend.Areas.Users.Models;
+using task_manager_app_backend.Areas.Users.Services;
 
-namespace task_manager_app_backend.Areas.Users.Services;
+namespace task_manager_app_backend.Areas.Users.Controllers;
 
 public class AuthenticationController : ControllerBase
 {

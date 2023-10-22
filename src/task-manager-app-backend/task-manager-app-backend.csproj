@@ -28,7 +28,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Users\Controllers\" />
     <Folder Include="Authentication\" />
   </ItemGroup>
 

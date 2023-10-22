@@ -11,9 +11,15 @@ public class AssignmentsController : ControllerBase
 
     [HttpGet]
     [Route("assignment")]
-    public async Task<ActionResult<IEnumerable<Assignment>>> GetAssigments(AssignmentsHandler handler)
+    public async Task<ActionResult<IEnumerable<ReducedAssignmentResponse>>> GetAssigments(CancellationToken token, AssignmentsHandler handler, [FromQuery] int page = 1, int pageSize = 10)
     {
-        return Ok(await handler.GetAssignments());
+        return Ok(await handler.GetAssignments(token, page, pageSize));
+    }
+    [HttpGet]
+    [Route("assignment/{id}")]
+    public async Task<ActionResult<FullAssignmentResponse>> GetAssigmentById(CancellationToken token, AssignmentsHandler handler, [FromRoute] int id)
+    {
+        return Ok(await handler.GetAssignmentById(token, id));
     }
 
     [HttpPut]

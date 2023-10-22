@@ -15,11 +15,40 @@ public class AssignmentsHandler : IHandler
         _dbContext = context;
     }
 
-    public async Task<ICollection<Assignment>> GetAssignments()
+    public async Task<ICollection<ReducedAssignmentResponse>> GetAssignments(CancellationToken token, int page = 1, int pageSize = 10)
     {
-        return await _dbContext.Assignments.Include(x => x.TasksRequiredToFinish).Include(x => x.Type).ToListAsync();
+        return await _dbContext.Assignments
+            .Include(x => x.TasksRequiredToFinish)
+            .Include(x => x.Type)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .AsNoTracking()
+            .Select(assignment => new ReducedAssignmentResponse(assignment.AssignmentId, assignment.Name, assignment.Type.Name))
+            .ToListAsync(token);
     }
-
+    public async Task<FullAssignmentResponse> GetAssignmentById(CancellationToken token, int id)
+    {
+        var assignment = await _dbContext.Assignments.Include(x => x.TasksRequiredToFinish)
+            .Include(x => x.Type).Where(x => x.AssignmentId == id).FirstOrDefaultAsync(token);
+        if (assignment != null)
+        {
+            return new FullAssignmentResponse()
+            {
+                AssignmentId = assignment.AssignmentId,
+                Name = assignment.Name,
+                Description = assignment.Description,
+                ExpectedTimeToFinish = assignment.ExpectedTimeToFinish,
+                DateCreated = assignment.DateCreated,
+                TypeName = assignment.Type.Name, // Assuming Type is a property in Assignment
+                ParentAssignmentId = assignment.ParentAssignmentId,
+                ParentAssignmentName = assignment.ParentAssignment?.Name,
+                ChildAssignments = assignment.TasksRequiredToFinish
+                    .Select(childAssignment => Tuple.Create(childAssignment.AssignmentId, childAssignment.Name))
+                    .ToList(),
+            };
+        }
+        throw new NotImplementedException();
+    }
     public async Task<ActionResult> CreateAnAssigment(CancellationToken token, AssignmentResquest model)
     {
         var type = _dbContext.AssignmentTypes.Where(x => x.Id == model.typeId).FirstOrDefault();
