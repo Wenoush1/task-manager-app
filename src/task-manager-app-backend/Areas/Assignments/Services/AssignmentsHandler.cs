@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using task_manager_app_backend.Abstractions;
 using task_manager_app_backend.Areas.Assignments.Models;
 using task_manager_app_backend.Data;
+using task_manager_app_backend.Middlewares.Exceptions;
 using task_manager_app_backend.Models;
 
 namespace task_manager_app_backend.Areas.Assignments.Services;
@@ -47,15 +48,14 @@ public class AssignmentsHandler : IHandler
                     .ToList(),
             };
         }
-        throw new NotImplementedException();
+        throw new InternalException("Assignment with selected ID doesn't exist.", 400, System.Net.HttpStatusCode.BadRequest);
     }
     public async Task<ActionResult> CreateAnAssigment(CancellationToken token, AssignmentResquest model)
     {
         var type = _dbContext.AssignmentTypes.Where(x => x.Id == model.typeId).FirstOrDefault();
         if (type == null)
         {
-            //TODO add middleware and custom exception
-            throw new Exception();
+            throw new InternalException("Type doesn't exist.", 400, System.Net.HttpStatusCode.BadRequest);
         }
         if (model.ParentAssignmentId == null)
         {

@@ -8,9 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Authentication\**" />
     <Compile Remove="Controllers\**" />
+    <Content Remove="Authentication\**" />
     <Content Remove="Controllers\**" />
+    <EmbeddedResource Remove="Authentication\**" />
     <EmbeddedResource Remove="Controllers\**" />
+    <None Remove="Authentication\**" />
     <None Remove="Controllers\**" />
   </ItemGroup>
 
@@ -25,10 +29,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Authentication\" />
   </ItemGroup>
 
 </Project>

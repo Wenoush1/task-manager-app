@@ -7,13 +7,15 @@ using task_manager_app_backend.Abstractions;
 using task_manager_app_backend.Areas.Users.Services;
 using task_manager_app_backend.Data;
 using task_manager_app_backend.Extensions;
-
+using task_manager_app_backend.Middlewares;
+using task_manager_app_backend.Middlewares.Exceptions;
 var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
 builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
 builder.Services.AddScopedByInterface<IHandler>();
+builder.Services.AddSingleton<ExceptionResolver>();
 //builder.Services.AddSingleton<ExceptionResolver>();
 
 // Connect Database
@@ -75,7 +77,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors();
 //app.UseMiddleware<ErrorHandlerMiddleware>();
 app.UseHttpsRedirection();
-
+app.UseMiddleware<ErrorHandlingMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 
