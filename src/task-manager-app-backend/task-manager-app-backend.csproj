@@ -8,9 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Authentication\**" />
     <Compile Remove="Controllers\**" />
+    <Content Remove="Authentication\**" />
     <Content Remove="Controllers\**" />
+    <EmbeddedResource Remove="Authentication\**" />
     <EmbeddedResource Remove="Controllers\**" />
+    <None Remove="Authentication\**" />
     <None Remove="Controllers\**" />
   </ItemGroup>
 
